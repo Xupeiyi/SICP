@@ -26,7 +26,4 @@
   (* 4.0 (product pi-term 0 inc n)))
 
 
-
-
-
 (pi 10000)

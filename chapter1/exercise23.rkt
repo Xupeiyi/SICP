@@ -1,7 +1,7 @@
 #lang racket
 (define (next n)
-  (if (= n 2) 3)
-  (+ n 2))
+  (if (= n 2) 3
+  (+ n 2)))
 
 (define (smallest-divisor n)
   (find-divisor n 2))

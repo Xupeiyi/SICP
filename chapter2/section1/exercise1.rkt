@@ -31,7 +31,7 @@
 (define (denom x) (cdr x))
 
 (define (print-rat x)
-  (newline)
+  (newline)s
   (display (numer x))
   (display "/")
   (display (denom x)))

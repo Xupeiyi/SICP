@@ -35,3 +35,7 @@
 (let ((p1 (make-point 1 9))
       (p2 (make-point 4 5)))
   (print-point (midpoint-segment (make-segment p1 p2))))
+
+(let ((p1 (make-point -1 -1))
+      (p2 (make-point 1 1)))
+  (print-point (midpoint-segment (make-segment p1 p2))))

@@ -35,7 +35,7 @@
        (abs (- (col position1) (col position2)))))
   
   (define (safe-on-row queen others)
-    (null? (filter (lambda (other) (on-same-row? queen other)) others)))
+    (null? (filter (lambda (other) (on-same-row? queen other)) others)))s
 
   (define (safe-on-diagonal queen others)
     (null? (filter (lambda (other) (on-same-diagonal? queen other)) others)))

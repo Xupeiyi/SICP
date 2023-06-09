@@ -30,26 +30,3 @@
                                         (two-sum n (- s i))))
                            (enumerate-interval 1 (min n (- s 3)))))))
 (three-sum 4 7)
-
-;;
-(define (flatmap proc seq)
-  (accumulate append null (map proc seq)))
-
-(define (ordered-triples n)
-  (flatmap (lambda (i)
-             (flatmap (lambda (j)
-                        (map (lambda (k)
-                               (list i j k))
-                             (enumerate-interval 1 (- j 1))))
-                      (enumerate-interval 1 (- i 1))))
-           (enumerate-interval 1 n)))
-
-(define (triple-sum t)
-  (+ (car t) (cadr t) (caddr t)))
-
-(define (ordered-triples-of-sum n s)
-  (filter (lambda (t)
-            (= s (triple-sum t)))
-          (ordered-triples n)))
-
-(ordered-triples-of-sum 4 7)

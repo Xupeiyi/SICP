@@ -6,7 +6,7 @@
         (cond ((= x1 x2)
                (cons x1 (intersection-set (cdr set1) (cdr set2))))
               ((< x1 x2) (intersection-set (cdr set1) set2))
-              ((> x1 x2) (intersection-set (set1 (cdr set2))))))))
+              ((> x1 x2) (intersection-set set1 (cdr set2)))))))
 
 
 (define (union-set set1 set2)

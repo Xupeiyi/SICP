@@ -27,6 +27,32 @@
 (define (weight tree)
   (if (leaf? tree) (weight-leaf tree) (cadddr tree)))
 
+;; insert x into set and maintain an ascending order
+(define (adjoin-set x set)
+  (cond ((null? set) (list x))
+        ((< (weight x) (weight (car set))) (cons x set))
+        (else (cons (car set) (adjoin-set x (cdr set))))))
+
+;; convert a list of (symbol frequency) pairs into a ordered set of leaves
+(define (make-leaf-set pairs)
+  (if (null? pairs) '()
+      (let ((pair (car pairs)))
+        (adjoin-set (make-leaf (car pair) ;; symbol 
+                               (cadr pair)) ;; frequency
+                    (make-leaf-set (cdr pairs))))))
+
+(define (successive-merge set)
+  (if (= (length set) 1) (car set)
+      (let ((first (car set))
+            (second (cadr set))
+            (rest (cddr set)))
+        (let ((new-tree (make-code-tree first second)))
+          (successive-merge (adjoin-set new-tree rest))))))
+
+
+(define (generate-huffman-tree pairs)
+  (successive-merge (make-leaf-set pairs)))
+
 ;; decode
 (define (choose-branch bit branch)
   (cond ((= bit 0) (left-branch branch))
@@ -64,13 +90,10 @@
       (append (encode-symbol (car message) tree)
               (encode (cdr message) tree))))
 
-(define sample-tree
-  (make-code-tree (make-leaf 'A 4)
-                  (make-code-tree (make-leaf 'B 2)
-                                  (make-code-tree (make-leaf 'D 1)
-                                                  (make-leaf 'C 1)))))
+(define sample-pairs '((A 4) (B 2) (C 1) (D 1)))
+
+(define sample-tree (generate-huffman-tree sample-pairs))
 
 (define sample-message '(A D A B B C A))
 
-(decode (encode sample-message sample-tree) sample-tree) ;;'(A D A B B C A)
- 
+(encode sample-message sample-tree) ;;'(0 1 1 0 0 1 0 1 0 1 1 1 0)

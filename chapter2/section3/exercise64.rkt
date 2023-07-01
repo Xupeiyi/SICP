@@ -8,6 +8,30 @@
 (define (make-tree entry left right)
   (list entry left right))
 
+
+
+;; second try on 2023-07-01
+
+(define (list->tree elements)
+  (car (partial-tree elements (length elements))))
+
+
+(define (partial-tree elements n)
+  (if (= n 0) (cons '() elements)
+      (let ((mid (quotient (+ n 1) 2)))
+        (let ((left-result (partial-tree elements (- mid 1))))
+          (let ((left-tree (car left-result))
+                (non-left-elements (cdr left-result)))
+            (let ((root (car non-left-elements))
+                  (right-result (partial-tree (cdr non-left-elements) (- n mid))))
+              (let ((right-tree (car right-result))
+                    (remaining-elements (cdr right-result)))
+                (cons (make-tree root left-tree right-tree) remaining-elements))))))))
+
+
+
+#|
+
 (define (list->tree elements)
   (car (partial-tree elements (length elements))))
 
@@ -30,5 +54,8 @@
                         (remaining-elts (cdr right-result)))
                     (cons (make-tree this-entry left-tree right-tree) remaining-elts))))))))
 
-
+|#
 (list->tree (list 1 3 5 7 9))
+(list->tree (list 1 2 3 4 5 6 7 8 9 10))
+
+

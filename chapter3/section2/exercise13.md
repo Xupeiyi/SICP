@@ -1,0 +1,1 @@
+(last-pair z) will result in an infinite loop

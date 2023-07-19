@@ -2,7 +2,8 @@
 
 (define (record-traversed x traversed)
     (if (and (pair? x) (false? (memq x traversed))) ;; if x is a pair and x not in traversed
-        (record-traversed (car x) (record-traversed (cdr x) (cons x traversed)))
+        (record-traversed (car x) 
+                          (record-traversed (cdr x) (cons x traversed)))
         traversed))
 
 (define (count-pairs x) 

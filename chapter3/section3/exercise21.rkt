@@ -20,9 +20,9 @@
 (define (insert-queue! queue item) 
     (let ((new-pair (mcons item '())))
         (cond ((empty-queue? queue) 
-               (set-front-ptr! queue new-pair)
-               (set-rear-ptr! queue new-pair)
-               queue)
+                (set-front-ptr! queue new-pair)
+                (set-rear-ptr! queue new-pair)
+                queue)
               (else 
                 (set-mcdr! (rear-ptr queue) new-pair)
                 (set-rear-ptr! queue new-pair)

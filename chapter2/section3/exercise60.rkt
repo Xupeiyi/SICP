@@ -2,7 +2,7 @@
 (define (element-of-set? x set)
   (cond ((null? set) false)
         ((equal? x (car set)) true)
-        (else (element-ofset? x (cdr set)))))
+        (else (element-of-set? x (cdr set)))))
 
 (define (adjoin-set x set)
   (cons x set))

@@ -5,7 +5,7 @@
           ((eq? op 'imag-part) (* r (sin a)))
           ((eq? op 'magnitude) r)
           ((eq? op 'angle) a)
-          else (error "Unknown op -- MAKE-FROM-MAG-ANG " op)))
+          (else (error "Unknown op -- MAKE-FROM-MAG-ANG " op))))
   dispatch)
 
 (define n1 (make-from-mag-ang 1.4142 0.78539))

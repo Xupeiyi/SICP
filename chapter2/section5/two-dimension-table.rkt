@@ -34,13 +34,10 @@
                   (else (error "Unknwon operation -- TABLE" m))))
         dispatch))
 
-(define t (make-table))
+(define operation-table (make-table))
 
-((t 'insert-proc!) 'a 'b 3)
-((t 'lookup-proc) 'a 'b)
+(define get (operation-table 'lookup-proc))
 
-((t 'insert-proc!) 'c 'd 4)
-((t 'insert-proc!) 'a 'b 5)
+(define put (operation-table 'insert-proc!))
 
-((t 'lookup-proc) 'c 'd)
-((t 'lookup-proc) 'a 'b)
+(provide get put)

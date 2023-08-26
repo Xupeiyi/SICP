@@ -26,6 +26,9 @@
 (define (scheme-number->complex n)
         (make-complex-from-real-imag (contents n) 0))
 
+(define (make-rat n d)
+    ((get 'make 'rational) n d))
+
 (put-coercion 'scheme-number 'complex scheme-number->complex)
 
-(provide add sub mul div exp make-complex-from-mag-ang make-complex-from-real-imag)
+(provide add sub mul div exp make-complex-from-mag-ang make-complex-from-real-imag make-rat)

@@ -17,19 +17,14 @@
 (define (div x y) (apply-generic 'div x y))
 (define (exp x y) (apply-generic 'exp x y))
 (define (equ? x y) (apply-generic 'equ? x y))
-
-;; (define (real-part x) (apply-generic 'real-part x))
-;; (define (imag-part x) (apply-generic 'imag-part x))
-;; (define (numer x) (apply-generic 'numer x))
+(define (sine x) (apply-generic 'sine x))
+(define (cosine x) (apply-generic 'cosine x))
 
 (define (make-complex-from-real-imag x y)
     ((get 'make-from-real-imag 'complex) x y))
 
 (define (make-complex-from-mag-ang r a)
     ((get 'make-from-mag-ang 'complex) r a))
-
-; (define (scheme-number->complex n)
-;         (make-complex-from-real-imag (contents n) 0))
 
 (define (make-rat n d)
     ((get 'make 'rational) n d))
@@ -51,7 +46,20 @@
 
 (div (make-complex-from-mag-ang 1 1) 2) ;; polar(1/2, 1)
 
-(exp 3 3)
+(exp 3 3) ;; 27
+
+(sine 1)
+
+(cosine 1)
+
+(sine (make-rat 3537115888337719 6755399441055744)) ;; pi / 6
+
+(cosine (make-rat 3537115888337719 3377699720527872)) ;; pi / 3
+
+(define c3 (make-complex-from-real-imag (make-rat 5 2) 2))
+(define c4 (make-complex-from-real-imag 2 (make-rat 5 2)))
+
+(mul c3 c4) ;; 0 + 10.25i = '(complex polar 10.25 . 1.5707963267948966)
 
 (provide add sub mul div equ? exp 
          make-complex-from-mag-ang make-complex-from-real-imag 

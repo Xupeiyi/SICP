@@ -2,10 +2,7 @@
 
 (require "arithmetic.rkt"
          "two-dimension-table.rkt"
-         "utils.rkt"
-         "raise.rkt")
-
-(install-raise)
+         "utils.rkt")
 
 (define (raise n) 
     (apply-generic 'raise n))

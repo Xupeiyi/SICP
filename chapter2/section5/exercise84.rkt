@@ -1,12 +1,6 @@
 #lang racket
 
-(require "./two-dimension-table.rkt" "./raise.rkt" "./arithmetic.rkt" "project.rkt")
-
-(install-raise)
-(install-project)
-
-(define (raise n) 
-    (apply-generic 'raise n))
+(require "./two-dimension-table.rkt" "./arithmetic.rkt")
 
 
 (define (attach-tag type-tag contents)

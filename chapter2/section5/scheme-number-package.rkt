@@ -12,6 +12,12 @@
     (define (raise-scheme-number n) 
         ((get 'make 'rational) n 1))
     (put 'raise 'scheme-number raise-scheme-number)
+    (put 'sine '(scheme-number) sin)
+    (put 'cosine '(scheme-number) cos)
+    (put 'atan '(scheme-number) atan)
+    (put 'sqrt '(scheme-number) sqrt)
     'done)
 
 (provide install-scheme-number-package)
+
+(atan 1 1)

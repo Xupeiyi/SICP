@@ -4,7 +4,7 @@
 (define (real-part z) (apply-generic 'real-part z))
 (define (imag-part z) (apply-generic 'imag-part z))
 (define (magnitude z) (apply-generic 'magnitude z))
-(define (angle z) (apply-generic 'angel z))
+(define (angle z) (apply-generic 'angle z))
 
 (define (install-rectangular-package) 
     ;; internal
@@ -71,11 +71,17 @@
                              (- (imag-part z1) (imag-part z2))))
     (define (mul-complex z1 z2) 
         (make-from-mag-ang (* (magnitude z1) (magnitude z2))
-                           (+ angle z1) (angle z2)))
+                           (+ (angle z1) (angle z2))))
     (define (div-complex z1 z2) 
         (make-from-mag-ang (/ (magnitude z1) (magnitude z2))
-                           (- angle z1) (angle z2)))
-
+                           (- (angle z1) (angle z2))))
+    (define (equ? z1 z2)
+        (and (= (real-part z1) (real-part z2)) 
+             (= (imag-part z1) (imag-part z2))))
+    (define (project-complex n)
+        (let ((numer (numerator (real-part n)))
+              (denom (denominator (real-part n))))
+             ((get 'make 'rational) numer denom)))
     (define (tag z) (attach-tag 'complex z))
     (put 'add '(complex complex) 
         (lambda (z1 z2) (tag (add-complex z1 z2))))
@@ -93,6 +99,8 @@
     (put 'imag-part '(complex) imag-part)
     (put 'magnitude '(complex) magnitude)
     (put 'angle '(complex) angle)
+    (put 'equ? '(complex complex) equ?)
+    (put 'project 'complex project-complex)
     'done) 
 
 (provide install-complex-package install-rectangular-package install-polar-package)

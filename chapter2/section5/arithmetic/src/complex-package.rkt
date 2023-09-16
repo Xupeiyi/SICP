@@ -1,5 +1,5 @@
 #lang racket
-(require "two-dimension-table.rkt" "./utils.rkt")
+(require "./two-dimension-table.rkt" "./utils.rkt")
 
 (define (real-part z) (apply-generic 'real-part z))
 (define (imag-part z) (apply-generic 'imag-part z))
@@ -109,6 +109,7 @@
     (put 'magnitude '(complex) magnitude)
     (put 'angle '(complex) angle)
     (put 'equ? '(complex complex) equ-complex?)
+    (put '=zero? '(complex) (lambda (n) (= (magnitude n) 0)))
     (put 'project 'complex project-complex)
     'done) 
 

@@ -9,6 +9,7 @@
     (put 'equ? '(scheme-number scheme-number) =)
     (put 'exp '(scheme-number scheme-number) expt)
     (put 'equ? '(scheme-number scheme-number) =)
+    (put '=zero? '(scheme-number) (lambda (n) (= n 0)))
     (define (raise-scheme-number n) 
         ((get 'make 'rational) n 1))
     (put 'raise 'scheme-number raise-scheme-number)
@@ -19,5 +20,3 @@
     'done)
 
 (provide install-scheme-number-package)
-
-(atan 1 1)

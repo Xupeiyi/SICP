@@ -12,7 +12,7 @@
     (define (project-complex n)
         (let ((numer (numerator (real-part n)))
               (denom (denominator (real-part n))))
-             (make-rat numer denom)))
+             (make-rational numer denom)))
 
     (define (project-rat n)
         (car n))
@@ -40,11 +40,11 @@
 (project c2)
 (projectable? c2)
 
-(define r1 (make-rat 5 2))
+(define r1 (make-rational 5 2))
 (project r1)
 (equal? (projectable? r1) #f)
 
-(define r2 (make-rat 3 1))
+(define r2 (make-rational 3 1))
 (project r2)
 (projectable? r2)
 
@@ -62,8 +62,8 @@
 (define c5 (make-complex-from-real-imag 9.5 1))
 (drop c5) 
 
-(define r3 (make-rat 6 2))
+(define r3 (make-rational 6 2))
 (drop r3) 
 
-(define r4 (make-rat 6 4))
+(define r4 (make-rational 6 4))
 (drop r4) 

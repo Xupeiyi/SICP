@@ -17,6 +17,7 @@
     (put 'cosine '(scheme-number) cos)
     (put 'atan '(scheme-number) atan)
     (put 'sqrt '(scheme-number) sqrt)
+    (put 'negate '(scheme-number) (lambda (n) (* -1 n)))
     'done)
 
 (provide install-scheme-number-package)

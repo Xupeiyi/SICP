@@ -65,4 +65,24 @@
                     (error "No method for these types -- APPLY-GENERIC"
                            (list op type-tags)))))))
 
-(provide apply-generic attach-tag contents type-tag raise raise-to drop projectable? project)
+
+(define (real-part z) (apply-generic 'real-part z))
+(define (imag-part z) (apply-generic 'imag-part z))
+(define (magnitude z) (apply-generic 'magnitude z))
+(define (angle z) (apply-generic 'angle z))
+
+(define (add x y) (apply-generic 'add x y))
+(define (sub x y) (apply-generic 'sub x y))
+(define (mul x y) (apply-generic 'mul x y))
+(define (div x y) (apply-generic 'div x y))
+(define (sqrt x) (apply-generic 'sqrt x))
+(define (sine x) (apply-generic 'sine x))
+(define (cosine x) (apply-generic 'cosine x))
+(define (atan x) (apply-generic 'atan x))
+(define (equ? x y) (apply-generic 'equ? x y))
+(define (=zero? x) (apply-generic '=zero? x))
+(define (negate x) (apply-generic 'negate x))
+
+(provide attach-tag apply-generic 
+         real-part imag-part magnitude angle
+         add sub mul div sqrt sine cosine atan equ? =zero? negate)

@@ -1,9 +1,10 @@
 #lang racket
 
-(require "two-dimension-table.rkt" "utils.rkt")
+(require "two-dimension-table.rkt" "generic.rkt")
 
-(define (add x y) (apply-generic 'add x y))
-(define (=zero? x) (apply-generic '=zero? x))
+; (define (add x y) (apply-generic 'add x y))
+; (define (sub x y) (apply-generic 'sub x y))
+; (define (=zero? x) (apply-generic '=zero? x))
 
 (define (install-polynomial-package)
     ;; internal procedures
@@ -15,6 +16,7 @@
     (define (variable? x) (symbol? x))
     (define (same-variable? v1 v2) (and (variable? v1) (variable? v2) (eq? v1 v2)))
     ;; representation of terms and term lists
+    
     (define (add-terms L1 L2) 
         (cond ((empty-termlist? L1) L2)
               ((empty-termlist? L2) L1)
@@ -26,21 +28,44 @@
                             (adjoin-term t2 (add-terms (rest-terms L2) L1)))
                            (else (adjoin-term (make-term (order t1) (add (coeff t1) (coeff t2)))
                                               (add-terms (rest-terms L1) (rest-terms L2)))))))))
+    
     (define (add-poly p1 p2) 
         (if (same-variable? (variable p1) (variable p2))
             (make-poly (variable p1) 
                        (add-terms (term-list p1) (term-list p2)))
             (error "Polys not in same var -- ADD-POLY" (list p1 p2))))
+    
+    (define (negate-poly p)
+        (define (negate-term t)
+            (make-term (order t) (negate (coeff t))))
+        (define (negate-termlist t) 
+            (if (empty-termlist? t) t
+                (adjoin-term (negate-term (first-term t)) 
+                             (negate-termlist (rest-terms t)))))
+        (make-poly (variable p) (negate-termlist (term-list p))))
+
+    ; (define (sub-terms L1 L2)
+    ;     (add-terms L1 (negate L2)))
+
+    (define (sub-poly p1 p2)
+        (if (same-variable? (variable p1) (variable p2))
+            ; (make-poly (variable p1)
+            ;            (sub-terms (term-list p1) (term-list p2)))
+            (add-poly p1 (negate-poly p2))
+            (error "Polys not in same var -- SUB-POLY" (list p1 p2))))
+    
     (define (mul-poly p1 p2) 
         (if (same-variable? (variable p1) (variable p2))
             (make-poly (variable p1) 
                        (mul-terms (term-list p1) (term-list p2)))
             (error "Polys not in same var -- MUL-POLY" (list p1 p2))))
+    
     (define (mul-terms L1 L2) 
         (if (empty-termlist? L1) 
             (the-empty-termlist)
             (add-terms (mul-term-by-all-terms (first-term L1) L2)
                        (mul-terms (rest-terms L1) L2))))
+    
     (define (mul-term-by-all-terms t1 L)
         (if (empty-termlist? L)
             (the-empty-termlist)
@@ -48,10 +73,12 @@
                 (adjoin-term 
                     (make-term (+ (order t1) (order t2)))
                     (mul-term-by-all-terms t1 (rest-terms L))))))
+    
     (define (adjoin-term term term-list) 
         (if (=zero? (coeff term)) 
             term-list 
             (cons term term-list)))
+    
     (define (=poly-zero? p)
         (define (=termlist-zero? t)
             (if (empty-termlist? t) 
@@ -59,6 +86,21 @@
                 (and (=zero? (coeff (first-term t))) 
                      (=termlist-zero? (rest-terms t)))))
         (=termlist-zero? (term-list p)))
+
+    (define (poly-equ? p1 p2)
+        (define (term-equ? t1 t2)
+            (and (equ? (order t1) (order t2))
+                 (equ? (coeff t1) (coeff t2))))
+        (define (termlist-equ? t1 t2)
+            (cond ((and (empty-termlist? t1) (empty-termlist? t2)) 
+                        #t)
+                  ((and (not (empty-termlist? t1)) (not (empty-termlist? t2))) 
+                        (and (term-equ? (first-term t1) (first-term t2))
+                             (termlist-equ? (rest-terms t1) (rest-terms t2))))
+                  (else #f)))
+        (and (same-variable? (variable p1) (variable p2))
+             (termlist-equ? (term-list p1) (term-list p2))))
+
     (define (the-empty-termlist) '())
     (define (first-term term-list) (car term-list))
     (define (rest-terms term-list) (cdr term-list))
@@ -71,10 +113,15 @@
     (define (tag p) (attach-tag 'polynomial p))
     (put 'add '(polynomial polynomial)
         (lambda (p1 p2) (tag (add-poly p1 p2))))
+    (put 'sub '(polynomial polynomial) 
+        (lambda (p1 p2) (tag (sub-poly p1 p2))))
+
     (put 'mul '(polynomial polynomial) 
         (lambda (p1 p2) (tag (mul-poly p1 p2))))
     (put 'make 'polynomial (lambda (var terms) (tag (make-poly var terms))))
     (put '=zero? '(polynomial) =poly-zero?)
+    (put 'equ? '(polynomial polynomial) poly-equ?)
+    (put 'negate '(polynomial) (lambda (p) (tag (negate-poly p))))
     'done)
 
 (provide install-polynomial-package)

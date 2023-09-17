@@ -1,5 +1,5 @@
 #lang racket
-(require "two-dimension-table.rkt" "./utils.rkt")
+(require "two-dimension-table.rkt" "generic.rkt")
 
 (define (install-rational-package)
     (define (numer x) (car x))
@@ -21,6 +21,8 @@
     (define (div-rat x y)
         (make-rat (* (numer x) (denom y))
                   (* (denom x) (numer y))))
+    (define (negate-rat r) 
+        (make-rat (* -1 (numer r)) (denom r)))
     (define (equ? x y)
         (and (= (numer x) (numer y))
              (= (denom x) (denom y))))
@@ -39,6 +41,7 @@
         (lambda (x y) (tag (mul-rat x y))))
     (put 'div '(rational rational)
         (lambda (x y) (tag (div-rat x y))))
+    (put 'negate '(rational) (lambda (n) (tag (negate-rat n))))
     (put 'sine '(rational) 
         (lambda (x) (sin (/ (numer x) (denom x)))))
     (put 'cosine '(rational) 
@@ -50,7 +53,6 @@
     (put '=zero? '(rational) =zero?)
     (put 'project 'rational project-rat)
     (put 'raise 'rational raise-rat)
-    ;; (put 'magnitude '(rational) (lambda (x) (/ (numer x) (denom x))))
     (put 'sqrt '(rational) (lambda (x) (/ (sqrt (numer x)) (sqrt (denom x)))))
     'done)
 

@@ -1,20 +1,20 @@
 #lang racket
-(require "./two-dimension-table.rkt" "./utils.rkt")
+(require "./two-dimension-table.rkt" "./generic.rkt")
 
-(define (real-part z) (apply-generic 'real-part z))
-(define (imag-part z) (apply-generic 'imag-part z))
-(define (magnitude z) (apply-generic 'magnitude z))
-(define (angle z) (apply-generic 'angle z))
+; (define (real-part z) (apply-generic 'real-part z))
+; (define (imag-part z) (apply-generic 'imag-part z))
+; (define (magnitude z) (apply-generic 'magnitude z))
+; (define (angle z) (apply-generic 'angle z))
 
-(define (add x y) (apply-generic 'add x y))
-(define (sub x y) (apply-generic 'sub x y))
-(define (mul x y) (apply-generic 'mul x y))
-(define (div x y) (apply-generic 'div x y))
-(define (sqrt x) (apply-generic 'sqrt x))
-(define (sine x) (apply-generic 'sine x))
-(define (cosine x) (apply-generic 'cosine x))
-(define (atan x) (apply-generic 'atan x))
-(define (equ? x y) (apply-generic 'equ? x y))
+; (define (add x y) (apply-generic 'add x y))
+; (define (sub x y) (apply-generic 'sub x y))
+; (define (mul x y) (apply-generic 'mul x y))
+; (define (div x y) (apply-generic 'div x y))
+; (define (sqrt x) (apply-generic 'sqrt x))
+; (define (sine x) (apply-generic 'sine x))
+; (define (cosine x) (apply-generic 'cosine x))
+; (define (atan x) (apply-generic 'atan x))
+; (define (equ? x y) (apply-generic 'equ? x y))
 
 (define (install-rectangular-package) 
     ;; internal
@@ -84,6 +84,9 @@
     (define (div-complex z1 z2) 
         (make-from-mag-ang (div (magnitude z1) (magnitude z2))
                            (sub (angle z1) (angle z2))))
+    (define (negate-complex z)
+        (make-from-real-imag (negate (real-part z)) 
+                             (negate (imag-part z))))
     (define (equ-complex? z1 z2)
         (and (equ? (real-part z1) (real-part z2)) 
              (equ? (imag-part z1) (imag-part z2))))
@@ -100,6 +103,7 @@
         (lambda (z1 z2) (tag (mul-complex z1 z2))))
     (put 'div '(complex complex)
         (lambda (z1 z2) (tag (div-complex z1 z2))))
+
     (put 'make-from-real-imag 'complex
         (lambda (x y) (tag (make-from-real-imag x y))))
     (put 'make-from-mag-ang 'complex
@@ -109,6 +113,7 @@
     (put 'magnitude '(complex) magnitude)
     (put 'angle '(complex) angle)
     (put 'equ? '(complex complex) equ-complex?)
+    (put 'negate '(complex) (lambda (z) (tag (negate-complex z))))
     (put '=zero? '(complex) (lambda (n) (= (magnitude n) 0)))
     (put 'project 'complex project-complex)
     'done) 

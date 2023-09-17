@@ -5,7 +5,7 @@
 
 (define (install-raise)
     (define (raise-scheme-number n) 
-        (make-rat n 1))
+        (make-rational n 1))
 
     (define (raise-rat n)
         (let ((numer (car n))
@@ -24,6 +24,6 @@
 (define s1 5)
 (raise s1) ;; '(rational 5 . 1)
 
-(define r1 (make-rat 2 3))
+(define r1 (make-rational 2 3))
 (raise r1) ;; '(complex rectangular 2/3 . 0)
 

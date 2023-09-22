@@ -13,15 +13,25 @@
 (equ? (make-complex-from-mag-ang 2 1)
       (negate (negate (make-complex-from-mag-ang 2 1))))
 
+;; termlist
+(define t1 (make-sparse-termlist (list (list 2 (make-rational 1 2)) 
+                                       (list 1 (make-complex-from-real-imag 1 1)))))
+(define t2 (make-sparse-termlist (list (list 2 (make-rational -1 2)) 
+                                       (list 1 (make-complex-from-real-imag -1 -1)))))
+(equ? (negate t1) t2)
+
+
+
+
 ;; polynomial
-(define t1 (list (list 5 2) 
-                 (list 3 (make-rational 3 7)) 
-                 (list 2 (make-complex-from-real-imag 1 3)) 
-                 (list 0 -7)))
-(define p1 (make-polynomial 'x t1))
-(define t2 (list (list 5 -2)
-                 (list 3 (make-rational -3 7)) 
-                 (list 2 (make-complex-from-real-imag -1 -3)) 
-                 (list 0 7)))
-(define p2 (make-polynomial 'x t2))
-(equ? (negate p1) p2)
+; (define t1 (list (list 5 2) 
+;                  (list 3 (make-rational 3 7)) 
+;                  (list 2 (make-complex-from-real-imag 1 3)) 
+;                  (list 0 -7)))
+; (define p1 (make-polynomial 'x t1))
+; (define t2 (list (list 5 -2)
+;                  (list 3 (make-rational -3 7)) 
+;                  (list 2 (make-complex-from-real-imag -1 -3)) 
+;                  (list 0 7)))
+; (define p2 (make-polynomial 'x t2))
+; (equ? (negate p1) p2)

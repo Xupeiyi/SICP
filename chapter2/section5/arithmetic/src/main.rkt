@@ -4,14 +4,19 @@
          "./scheme-number-package.rkt"
          "./rational-package.rkt"
          "./complex-package.rkt"
-         "polynomial.rkt")
+         "polynomial/dense-termlist.rkt"
+         "polynomial/sparse-termlist.rkt"
+         "polynomial/polynomial.rkt")
 
 (install-scheme-number-package)
 (install-rational-package)
 (install-rectangular-package)
 (install-polar-package)
 (install-complex-package)
-(install-polynomial-package)
+
+(install-dense-termlist-package)
+(install-sparse-termlist-package)
+;;(install-polynomial-package)
 
 ; (define (add x y) (apply-generic 'add x y))
 ; (define (sub x y) (apply-generic 'sub x y))
@@ -35,6 +40,11 @@
 (define (make-polynomial var terms)
     ((get 'make 'polynomial) var terms))
 
+(define (make-dense-termlist args) 
+    ((get 'make 'dense-termlist) args))
+
+(define (make-sparse-termlist args) 
+    ((get 'make 'sparse-termlist) args))
 ; (put-coercion 'scheme-number 'complex scheme-number->complex)
 
 ; (define r1 (make-rational 5 2))
@@ -69,4 +79,4 @@
 
 (provide add sub mul div equ? exp =zero? sine cosine negate
          make-complex-from-mag-ang make-complex-from-real-imag 
-         make-rational make-polynomial)
+         make-rational make-polynomial make-dense-termlist make-sparse-termlist)

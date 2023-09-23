@@ -75,6 +75,39 @@
     (put 'mul '(dense-termlist dense-termlist) 
         (lambda (L1 L2) (tag (mul-terms L1 L2))))
 
+    (define (div-terms L1 L2)
+        (if (empty-termlist? L1)
+            (list (the-empty-termlist) (the-empty-termlist))
+            (let ((t1 (first-term L1))
+                  (t2 (first-term L2)))
+                  (if (> (order t2) (order t1))
+                      (list (the-empty-termlist) L1)
+                      (let ((new-c (div (coeff t1) (coeff t2)))
+                            (new-o (- (order t1) (order t2))))
+                           (let ((rest-of-result 
+                                    (div-terms (sub-terms 
+                                                    L1 
+                                                    (mul-term-by-all-terms 
+                                                        (make-term new-o new-c) 
+                                                        L2)) 
+                                               L2)))
+                                (list (adjoin-term (make-term new-o new-c) 
+                                                   (car rest-of-result)) 
+                                      (cadr rest-of-result))))))))
+    (put 'div '(dense-termlist dense-termlist) 
+        (lambda (L1 L2) 
+            (let ((result (div-terms L1 L2)))
+                 (list (tag (car result)) (tag (cadr result))))))
+
+    (define (equ-termlist? t1 t2)
+        (cond ((and (empty-termlist? t1) (empty-termlist? t2)) 
+                    #t)
+              ((and (not (empty-termlist? t1)) (not (empty-termlist? t2))) 
+                    (and (equ? (car t1) (car t2))
+                         (equ-termlist? (rest-terms t1) (rest-terms t2))))
+              (else #f)))
+    (put 'equ? '(dense-termlist dense-termlist) equ-termlist?)
+
     (put 'make 'dense-termlist 
         (lambda (args) (tag args)))
     'done)

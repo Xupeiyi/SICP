@@ -16,4 +16,11 @@
 ;; test dense-termlist
 (define dt1 (make-dense-termlist (list 4 -2)))
 (define dt2 (make-dense-termlist (list 1 0 r1)))
-(equ? (mul dt1 dt2) (make-dense-termlist 4 2 -14 7))
+(define result-t (make-dense-termlist (list 4 -2 -14 7)))
+(equ? (mul dt1 dt2) result-t)
+
+;; test polynomial
+(define p1 (make-polynomial 'x dt1))
+(define p2 (make-polynomial 'x dt2))
+(define result-p (make-polynomial 'x result-t))
+(equ? (mul p1 p2) result-p)

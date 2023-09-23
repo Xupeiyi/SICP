@@ -222,6 +222,8 @@
                        (mul (term-list p1) (term-list p2)))
             (error "Polys not in same var -- MUL-POLY" (list p1 p2))))
     
+    (put 'mul '(polynomial polynomial) 
+        (lambda (p1 p2) (tag (mul-poly p1 p2))))
     ; (define (mul-terms L1 L2) 
     ;     (if (empty-termlist? L1) 
     ;         (the-empty-termlist L1)
@@ -277,9 +279,6 @@
     (put 'add '(polynomial polynomial)
         (lambda (p1 p2) (tag (add-poly p1 p2))))
 
-
-    (put 'mul '(polynomial polynomial) 
-        (lambda (p1 p2) (tag (mul-poly p1 p2))))
     (put 'make 'polynomial (lambda (var terms) (tag (make-poly var terms))))
     (put '=zero? '(polynomial) =poly-zero?)
     (put 'equ? '(polynomial polynomial) poly-equ?)

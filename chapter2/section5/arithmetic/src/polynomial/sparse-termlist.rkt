@@ -62,6 +62,11 @@
         (lambda (L1 L2) (tag (add-terms L1 L2))))
     
     ;; sub
+    (define (sub-terms L1 L2)
+        (add-terms L1 (negate-termlist L2)))
+    
+    (put 'sub '(sparse-termlist sparse-termlist)
+        (lambda (L1 L2) (tag (sub-terms L1 L2))))
 
     ;; mul
     (define (mul-term-by-all-terms t1 L)
@@ -69,7 +74,8 @@
             (the-empty-termlist)
             (let ((t2 (first-term L)))
                 (adjoin-term 
-                    (make-term (add (order t1) (order t2)))
+                    (make-term (add (order t1) (order t2)) 
+                               (mul (coeff t1) (coeff t2)))
                     (mul-term-by-all-terms t1 (rest-terms L))))))
     (define (mul-terms L1 L2) 
         (if (empty-termlist? L1) 
@@ -88,6 +94,12 @@
               (else #f)))
     (put 'equ? '(sparse-termlist sparse-termlist) equ-termlist?)
 
+    (define (=zero?-termlist t)
+        (if (empty-termlist? t) 
+            #t
+            (and (=zero? (coeff (first-term t))) 
+                    (=zero?-termlist (rest-terms t)))))
+    (put '=zero? '(sparse-termlist) =zero?-termlist)
 
     (put 'make 'sparse-termlist 
         (lambda (args) (tag args)))

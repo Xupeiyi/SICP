@@ -1,7 +1,6 @@
 #lang racket
 
-(require "../two-dimension-table.rkt" "../generic.rkt" 
-         "term.rkt")
+(require "../two-dimension-table.rkt" "../generic.rkt")
 
 ; (define (add x y) (apply-generic 'add x y))
 ; (define (sub x y) (apply-generic 'sub x y))
@@ -160,11 +159,11 @@
     ;'done)
 
 
-(define (empty-termlist? L) (apply-generic 'empty-termlist? L))
-(define (first-term L) (apply-generic 'first-term L))
-(define (rest-terms L) (apply-generic 'rest-terms L))
-(define (the-empty-termlist L) (apply-generic 'the-empty-termlist L))
-(define (adjoin-term t L) (apply-generic 'adjoin-term t L))
+; (define (empty-termlist? L) (apply-generic 'empty-termlist? L))
+; (define (first-term L) (apply-generic 'first-term L))
+; (define (rest-terms L) (apply-generic 'rest-terms L))
+; (define (the-empty-termlist L) (apply-generic 'the-empty-termlist L))
+; (define (adjoin-term t L) (apply-generic 'adjoin-term t L))
 
 (define (install-polynomial-package)
     ;; internal procedures
@@ -178,22 +177,22 @@
     ;; representation of terms and term lists
     
     ;; need to be generic: empty-termlist? first-term rest-terms order coeff adjoin-term make-term
-    (define (add-terms L1 L2) 
-        (cond ((empty-termlist? L1) L2)
-              ((empty-termlist? L2) L1)
-              (else 
-                (let ((t1 (first-term L1)) (t2 (first-term L2)))
-                     (cond ((> (order t1) (order t2))
-                            (adjoin-term t1 (add-terms (rest-terms L1) L2)))
-                           ((< (order t1) (order t2))
-                            (adjoin-term t2 (add-terms (rest-terms L2) L1)))
-                           (else (adjoin-term (make-term (order t1) (add (coeff t1) (coeff t2)))
-                                              (add-terms (rest-terms L1) (rest-terms L2)))))))))
+    ; (define (add-terms L1 L2) 
+    ;     (cond ((empty-termlist? L1) L2)
+    ;           ((empty-termlist? L2) L1)
+    ;           (else 
+    ;             (let ((t1 (first-term L1)) (t2 (first-term L2)))
+    ;                  (cond ((> (order t1) (order t2))
+    ;                         (adjoin-term t1 (add-terms (rest-terms L1) L2)))
+    ;                        ((< (order t1) (order t2))
+    ;                         (adjoin-term t2 (add-terms (rest-terms L2) L1)))
+    ;                        (else (adjoin-term (make-term (order t1) (add (coeff t1) (coeff t2)))
+    ;                                           (add-terms (rest-terms L1) (rest-terms L2)))))))))
     
     (define (add-poly p1 p2) 
         (if (same-variable? (variable p1) (variable p2))
             (make-poly (variable p1) 
-                       (add-terms (term-list p1) (term-list p2)))
+                       (add (term-list p1) (term-list p2)))
             (error "Polys not in same var -- ADD-POLY" (list p1 p2))))
     
     (define (negate-poly p)
@@ -214,6 +213,8 @@
             ;            (sub-terms (term-list p1) (term-list p2)))
             (add-poly p1 (negate-poly p2))
             (error "Polys not in same var -- SUB-POLY" (list p1 p2))))
+    (put 'sub '(polynomial polynomial) 
+        (lambda (p1 p2) (tag (sub-poly p1 p2))))
     
     (define (mul-poly p1 p2) 
         (if (same-variable? (variable p1) (variable p2))
@@ -242,12 +243,12 @@
     ;         (cons term term-list)))
     
     (define (=poly-zero? p)
-        (define (=termlist-zero? t)
-            (if (empty-termlist? t) 
-                #t
-                (and (=zero? (coeff (first-term t))) 
-                     (=termlist-zero? (rest-terms t)))))
-        (=termlist-zero? (term-list p)))
+        ; (define (=termlist-zero? t)
+        ;     (if (empty-termlist? t) 
+        ;         #t
+        ;         (and (=zero? (coeff (first-term t))) 
+        ;              (=termlist-zero? (rest-terms t)))))
+        (=zero? (term-list p)))
 
     (define (poly-equ? p1 p2)
         ; (define (term-equ? t1 t2)
@@ -263,7 +264,7 @@
         (and (same-variable? (variable p1) (variable p2))
              (equ? (term-list p1) (term-list p2))))
 
-    (define (the-empty-termlist) '())
+    ; (define (the-empty-termlist) '())
     ; (define (first-term term-list) (car term-list))
     ; (define (rest-terms term-list) (cdr term-list))
     ; (define (empty-termlist? term-list) (null? term-list))
@@ -275,8 +276,7 @@
     (define (tag p) (attach-tag 'polynomial p))
     (put 'add '(polynomial polynomial)
         (lambda (p1 p2) (tag (add-poly p1 p2))))
-    (put 'sub '(polynomial polynomial) 
-        (lambda (p1 p2) (tag (sub-poly p1 p2))))
+
 
     (put 'mul '(polynomial polynomial) 
         (lambda (p1 p2) (tag (mul-poly p1 p2))))

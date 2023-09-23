@@ -13,14 +13,12 @@
 (equ? (make-complex-from-mag-ang 2 1)
       (negate (negate (make-complex-from-mag-ang 2 1))))
 
-;; termlist
+;; sparse-termlist
 (define t1 (make-sparse-termlist (list (list 2 (make-rational 1 2)) 
                                        (list 1 (make-complex-from-real-imag 1 1)))))
 (define t2 (make-sparse-termlist (list (list 2 (make-rational -1 2)) 
                                        (list 1 (make-complex-from-real-imag -1 -1)))))
 (equ? (negate t1) t2)
-
-
 
 
 ;; polynomial

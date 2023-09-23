@@ -32,6 +32,5 @@
 ; (define (coeff term) (cadr term))
 
 (install-term-package)
-(coeff (make-term 1 2))
 
 (provide make-term coeff order)

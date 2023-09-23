@@ -24,9 +24,11 @@
     (define (make-from-real-imag x y) (cons x y))
     (define (magnitude z) 
         (sqrt (add (square (real-part z)) 
-                 (square (imag-part z)))))
+                   (square (imag-part z)))))
     (define (angle z)
-        (atan (div (imag-part z) (real-part z))))
+        (if (=zero? (real-part z))
+            ()
+            (atan (div (imag-part z) (real-part z)))))
     (define (make-from-mag-ang r a)
         (cons (mul r (cosine a))) (mul r (sine a)))
 

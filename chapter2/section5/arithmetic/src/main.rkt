@@ -16,7 +16,7 @@
 
 (install-dense-termlist-package)
 (install-sparse-termlist-package)
-;;(install-polynomial-package)
+(install-polynomial-package)
 
 ; (define (add x y) (apply-generic 'add x y))
 ; (define (sub x y) (apply-generic 'sub x y))
@@ -45,6 +45,7 @@
 
 (define (make-sparse-termlist args) 
     ((get 'make 'sparse-termlist) args))
+
 ; (put-coercion 'scheme-number 'complex scheme-number->complex)
 
 ; (define r1 (make-rational 5 2))

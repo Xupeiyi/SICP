@@ -93,9 +93,8 @@
              (make-procedure (lambda-parameters exp) 
                              (lambda-body exp)
                              env)))
-;; 7. if
-; (define (if? exp) (tagged-list? exp 'if))
 
+;; 7. if ('if predicate consequent alternative)
 (define (if-predicate exp) (cadr exp))
 
 (define (if-consequent exp) (caddr exp))
@@ -115,9 +114,7 @@
 
 (put 'if eval-if)
 
-;; 8. begin
-; (define (begin? exp)
-;     (tagged-list? exp 'begin))
+;; 8. begin ('begin action1 action2 ...)
 
 (define (begin-actions exp) (cdr exp))
 
@@ -140,7 +137,6 @@
 (put 'begin 
     (lambda (exp env) (eval-sequence (begin-actions exp) env)))
 
-
 ;; 9. application
 (define (application? exp) 
     (pair? exp))
@@ -161,9 +157,10 @@
     (cdr ops))
 
 ;; derived expressions
-;; cond
-; (define (cond? exp) 
-;     (tagged-list? exp 'cond))
+;; cond ('cond ((predicate action)
+;;              (predicate action)
+;;                ...
+;;              (else action)))
 
 (define (cond-clauses exp)
     (cdr exp))
@@ -194,3 +191,58 @@
                           (expand-clauses rest))))))
 (put 'cond
      (lambda (exp env) (eval (cond->if exp) env)))
+
+;; and ('and predicate1 predicate2 ...)
+;; or  ('or predicate1 predicate2 ... )
+;; 1. eval-and and eval-or
+
+(define (predicates exp)
+    (cdr exp))
+
+(define (eval-and exp env)
+    (if (null? (predicate exp) 'true)
+        (eval-and-predicates (predicate exp) env)))
+
+(define (eval-and-predicates exps env)
+    (let ((first-result (eval (first-exp exps) env))) 
+         ;; if first predicate is the last one or is false
+         ;; return the first predicate's evaluation 
+         (if (or (last-exp? exps) (false? first-result))
+             first-result 
+             (eval-and-predicates (rest-exps exps) env))))
+
+(define (eval-or exp env)
+    (if (null? (predicate exp) 'false)
+        (eval-or-predicates (predicate exp) env)))
+
+(define (eval-or-predicates exps env)
+    (let ((first-result (eval (first-exp exps) env))) 
+         ;; if first predicate is the last one or is true
+         ;; return the first predicate's evaluation 
+         (if (or (last-exp? exps) (true? first-result))
+             first-result 
+             (eval-or-predicates (rest-exps exps) env))))
+
+
+;; 2. implemented as derived expression
+(define (and->if exp)
+    (if (null? (cdr exp)) 'true  
+        (expand-and (cdr exp))))
+
+(define (expand-and predicates)
+    (if (last-exp? predicates) 
+        (first-exp predicates)
+        (make-if (first-exp predicate) 
+                 (expand (cdr predicates))
+                 'false)))
+
+(define (or->if exp)
+    (if (null? (cdr exp)) 'false 
+        (expand (cdr exp))))
+
+(define (expand-or predicates)
+    (if (last-exp? predicates) 
+        (first-exp predicates)
+        (make-if (first-exp predicate) 
+                 'true
+                 (expand-or (cdr predicates)))))

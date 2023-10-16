@@ -185,4 +185,4 @@
 
 (provide 
     adder multiplier constant probe
-    make-connector set-value! get-value forget-value! has-value?)
+    make-connector set-value! get-value forget-value! has-value? connect)

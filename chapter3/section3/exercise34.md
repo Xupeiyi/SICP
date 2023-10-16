@@ -1,0 +1,1 @@
+when b's value is set, a's value cannot be set because only the product connector's value is set for the multiplier.

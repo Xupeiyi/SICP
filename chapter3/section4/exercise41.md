@@ -1,0 +1,1 @@
+I don't agree with Ben. Reading the value in a parallel manner won't result in inconsistency. 

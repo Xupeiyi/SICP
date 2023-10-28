@@ -66,7 +66,9 @@
     ((cons-stream a b)
      (cons a (lambda () b)))))
 
-(provide cons-stream mul-streams integers stream-car stream-cdr stream-ref ones)
+(provide cons-stream stream-car stream-cdr stream-ref 
+         add-streams mul-streams 
+         integers ones)
 ;; ===================
 ;; prime?
 ;; ===================

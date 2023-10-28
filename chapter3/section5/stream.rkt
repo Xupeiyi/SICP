@@ -1,5 +1,6 @@
 #lang racket
 
+
 (define (stream-car stream)
     (car stream))
 
@@ -11,10 +12,11 @@
         (stream-car s)
         (stream-ref (stream-cdr s) (- n 1))))
 
-(define (stream-map proc s)
-    (if (stream-null? s)
+(define (stream-map proc . argstreams)
+    (if (stream-null? (car argstreams))
         the-empty-stream
-        (cons-stream (proc (stream-car s)) (stream-map proc (stream-cdr s)))))
+        (cons-stream (apply proc (map stream-car argstreams))
+                     (apply stream-map (cons proc (map stream-cdr argstreams))))))
 
 (define (stream-for-each proc s)
     (if (stream-null? s) 
@@ -37,35 +39,52 @@
           (else (stream-filter pred (stream-cdr stream)))))
 
 (define the-empty-stream '())
+
 (define stream-null? null?)
 
-(define (delay exp)
-    (lambda () exp))
+; (define (delay exp)
+;     (lambda () (exp)))
 
 (define (force delayed-object)
     (delayed-object))
 
-(define (cons-stream a b)
-    (cons a (delay b)))
+; (define (cons-stream a b)
+;     (cons a (delay b)))
 
+(define (add-streams s1 s2)
+    (stream-map + s1 s2))
+
+(define (mul-streams s1 s2)
+    (stream-map * s1 s2))
+
+(define ones (cons-stream 1 ones))
+
+(define integers (cons-stream 1 (add-streams ones integers)))
+
+(define-syntax cons-stream
+  (syntax-rules ()
+    ((cons-stream a b)
+     (cons a (lambda () b)))))
+
+(provide cons-stream mul-streams integers stream-car stream-cdr stream-ref ones)
 ;; ===================
 ;; prime?
 ;; ===================
-(define (smallest-divisor n)
-  (find-divisor n 2))
+; (define (smallest-divisor n)
+;   (find-divisor n 2))
 
-(define (find-divisor n test-divisor)
-  (cond ((> (square test-divisor) n) n)
-        ((divides? test-divisor n) test-divisor)
-        (else (find-divisor n (+ test-divisor 1)))))
+; (define (find-divisor n test-divisor)
+;   (cond ((> (square test-divisor) n) n)
+;         ((divides? test-divisor n) test-divisor)
+;         (else (find-divisor n (+ test-divisor 1)))))
 
-(define (divides? a b)
-  (= (remainder b a) 0))
+; (define (divides? a b)
+;   (= (remainder b a) 0))
 
-(define (prime? n)
-  (= n (smallest-divisor n)))
+; (define (prime? n)
+;   (= n (smallest-divisor n)))
 
-(define (square n)(* n n))
+; (define (square n)(* n n))
 
-(stream-car (stream-cdr (stream-filter prime? 
-    (stream-enumerate-interval 10000 1000000))))
+; (stream-car (stream-cdr (stream-filter prime? 
+;     (stream-enumerate-interval 10000 1000000))))

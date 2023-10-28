@@ -60,6 +60,10 @@
 (define (scale-stream stream factor)
     (stream-map (lambda (x) (* x factor)) stream))
 
+(define (partial-sums s)
+    (cons-stream (stream-car s) 
+                 (add-streams (stream-cdr s) (partial-sums s))))
+
 (define ones (cons-stream 1 ones))
 
 (define integers (cons-stream 1 (add-streams ones integers)))
@@ -70,7 +74,7 @@
      (cons a (lambda () b)))))
 
 (provide cons-stream stream-car stream-cdr stream-ref stream-null?
-         add-streams mul-streams scale-stream
+         add-streams mul-streams scale-stream partial-sums stream-map
          integers ones)
 ;; ===================
 ;; prime?

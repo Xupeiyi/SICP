@@ -50,6 +50,8 @@
          (or-gate c1 c2 c-out)
          'ok))
 
+;; the key to the problem is to connect the wires to the correct gates
+;; don't need to care about the return values (there's none)
 (define (ripple-carry-adder a-list b-list s-list c)
     (let ((c-in (make-wire)))
          (if (null? (cdr a-list))

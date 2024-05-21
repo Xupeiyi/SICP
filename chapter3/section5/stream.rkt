@@ -71,14 +71,36 @@
 
 (define integers (cons-stream 1 (add-streams ones integers)))
 
+(define (integrate-series s) (div-streams s integers))
+
+; (define-syntax cons-stream
+;   (syntax-rules ()
+;     ((cons-stream a b)
+;      (cons a (lambda () b)))))
+
+(define (memo-proc proc)
+  (let ((already-run? false) (result false))
+    (lambda ()
+      (if (not already-run?)
+          (begin (set! result (proc))
+                 (set! already-run? true)
+                 result)
+          result))))
+          
 (define-syntax cons-stream
   (syntax-rules ()
     ((cons-stream a b)
-     (cons a (lambda () b)))))
+     (cons a (delay b)))))
 
-(provide cons-stream stream-car stream-cdr stream-ref stream-null?
+(define-syntax delay
+  (syntax-rules ()
+    ((delay object)
+     (memo-proc (lambda() object)))))
+
+(provide cons-stream 
+         stream-car stream-cdr stream-ref stream-null?
          add-streams mul-streams div-streams scale-stream partial-sums stream-map
-         integers ones)
+         integers ones integrate-series)
 ;; ===================
 ;; prime?
 ;; ===================

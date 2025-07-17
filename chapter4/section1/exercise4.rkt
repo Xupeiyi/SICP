@@ -233,12 +233,12 @@
     (if (last-exp? predicates) 
         (first-exp predicates)
         (make-if (first-exp predicate) 
-                 (expand (cdr predicates))
+                 (expand-and (cdr predicates))
                  'false)))
 
 (define (or->if exp)
     (if (null? (cdr exp)) 'false 
-        (expand (cdr exp))))
+        (expand-or (cdr exp))))
 
 (define (expand-or predicates)
     (if (last-exp? predicates) 
@@ -246,3 +246,6 @@
         (make-if (first-exp predicate) 
                  'true
                  (expand-or (cdr predicates)))))
+
+(put 'and eval-and)
+(put 'or eval-or)
